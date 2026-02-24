@@ -45,7 +45,7 @@ export function About() {
           </h2>
           <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 space-y-3">
             <p className="text-stone-700 dark:text-stone-300 text-sm leading-relaxed">
-              Harmonic is a functional prototype built for the Constructive Dialogue Institute (CDI). While many AI tools focus on information delivery or debate winning, Harmonic is designed for <strong className="text-stone-900 dark:text-stone-100">experience and practice</strong>. It creates a safe, low-stakes environment for users to apply CDI's curriculum by engaging with a realistic AI partner who holds different core values.
+              Harmonic is a functional prototype. While many AI tools focus on information delivery or debate winning, Harmonic is designed for <strong className="text-stone-900 dark:text-stone-100">experience and practice</strong>. It creates a safe, low-stakes environment for users to apply CDI's curriculum by engaging with a realistic AI partner who holds different core values.
             </p>
             <p className="text-stone-700 dark:text-stone-300 text-sm leading-relaxed">
               The goal isn't to change the AI's mind or win an argument; it is to find the "resonance" in a difficult conversation—learning to hear the fundamental human values beneath an opposing political or social stance.
