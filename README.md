@@ -2,10 +2,18 @@
 
 > Finding the notes that fit together, even when they're not the same.
 
-A dialogue practice tool built for the [Constructive Dialogue Institute](https://constructivedialogue.org). Pick a topic, meet a realistic AI conversation partner who holds a different view, and practice constructive engagement.
+A dialogue practice tool. Pick a topic, meet a realistic AI conversation partner who holds a different view, and practice constructive engagement.
 
 **Live:** [harmonic.nickwenner.com](https://harmonic.nickwenner.com)
 **About / write-up:** [harmonic.nickwenner.com/#/about](https://harmonic.nickwenner.com/#/about)
+
+---
+
+## Screenshots
+
+| Topic Selection | Conversation | Reflection |
+|---|---|---|
+| ![Topic selection screen](docs/screenshots/01-topic-selection.png) | ![Chat with AI persona](docs/screenshots/02-conversation.png) | ![End of conversation reflection](docs/screenshots/03-reflection.png) |
 
 ---
 
