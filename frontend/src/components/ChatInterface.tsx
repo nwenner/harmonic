@@ -65,7 +65,7 @@ export function ChatInterface({
       </div>
 
       {/* Input */}
-      <div className="border-t border-stone-200 bg-white px-4 py-4">
+      <div className="border-t border-stone-200 bg-white px-4 pt-3 pb-4 pb-[env(safe-area-inset-bottom,1rem)]">
         <form
           onSubmit={handleSubmit}
           className="max-w-2xl mx-auto flex gap-3 items-end"
@@ -79,7 +79,7 @@ export function ChatInterface({
             rows={1}
             disabled={isLoading}
             className="flex-1 resize-none px-4 py-3 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-stone-400 disabled:opacity-50 max-h-36 overflow-y-auto"
-            style={{ lineHeight: "1.5" }}
+            style={{ lineHeight: "1.5", fontSize: "16px" }}
           />
           <button
             type="submit"
@@ -89,7 +89,7 @@ export function ChatInterface({
             Send
           </button>
         </form>
-        <p className="text-xs text-stone-300 text-center mt-2 max-w-2xl mx-auto">
+        <p className="hidden sm:block text-xs text-stone-300 text-center mt-2 max-w-2xl mx-auto">
           Press Enter to send · Shift+Enter for new line
         </p>
       </div>

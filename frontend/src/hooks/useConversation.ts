@@ -18,7 +18,7 @@ export function useConversation() {
   const [error, setError] = useState<string | null>(null);
 
   const startConversation = useCallback(
-    async (selectedTopic: string, stance: string) => {
+    async (selectedTopic: string, stance: string): Promise<boolean> => {
       setTopic(selectedTopic);
       setUserStance(stance);
       setIsLoadingPersona(true);
@@ -36,7 +36,6 @@ export function useConversation() {
         if (!res.ok) throw new Error("Failed to generate persona");
         const data = await res.json();
         setPersona(data.persona);
-        // Seed with an opening message from the persona
         const opener: ChatMessage = {
           id: uid(),
           role: "assistant",
@@ -44,10 +43,12 @@ export function useConversation() {
           timestamp: new Date(),
         };
         setMessages([opener]);
+        return true;
       } catch (e) {
         setError(
           e instanceof Error ? e.message : "Something went wrong. Try again."
         );
+        return false;
       } finally {
         setIsLoadingPersona(false);
       }

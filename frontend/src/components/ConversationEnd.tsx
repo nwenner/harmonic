@@ -29,7 +29,7 @@ export function ConversationEnd({
   const userTurns = Math.floor(messageCount / 2);
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col items-center justify-center px-6 py-12">
+    <div className="min-h-dvh bg-stone-50 flex flex-col items-center justify-start sm:justify-center px-4 sm:px-6 py-8 sm:py-12">
       <div className="max-w-lg w-full">
         {/* Header */}
         <div className="text-center mb-8">

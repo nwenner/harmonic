@@ -22,8 +22,8 @@ function App() {
   } = useConversation();
 
   async function handleStart(selectedTopic: string, stance: string) {
-    await startConversation(selectedTopic, stance);
-    setAppState("chat");
+    const ok = await startConversation(selectedTopic, stance);
+    if (ok) setAppState("chat");
   }
 
   async function handleEnd() {
@@ -55,7 +55,7 @@ function App() {
 
   if (appState === "chat" && persona) {
     return (
-      <div className="h-screen flex flex-col">
+      <div className="h-dvh flex flex-col">
         <PersonaCard persona={persona} topic={topic} onEnd={handleEnd} />
         <ChatInterface
           messages={messages}

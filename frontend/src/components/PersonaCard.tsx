@@ -45,15 +45,15 @@ export function PersonaCard({ persona, topic, onEnd }: Props) {
               <span className="font-semibold text-stone-900 text-sm">
                 {persona.name}
               </span>
-              <span className="text-stone-400 text-xs">
+              <span className="text-stone-400 text-xs truncate">
                 {persona.age} · {persona.occupation} · {persona.location}
               </span>
             </div>
-            <p className="text-stone-600 text-xs mt-0.5 leading-relaxed">
+            <p className="text-stone-600 text-xs mt-0.5 leading-relaxed line-clamp-2">
               {persona.oneLineSummary}
             </p>
             <div className="mt-1">
-              <span className="inline-block text-xs bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full">
+              <span className="inline-block text-xs bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full truncate max-w-full">
                 Topic: {topic}
               </span>
             </div>

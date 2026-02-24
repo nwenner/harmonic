@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CURATED_TOPICS } from "../types";
 
 interface Props {
@@ -6,13 +6,32 @@ interface Props {
   isLoading: boolean;
 }
 
+const LOADING_PHRASES = [
+  "Finding your conversation partner...",
+  "Learning about their background...",
+  "Getting to know their perspective...",
+  "Almost ready...",
+];
+
 export function TopicSelector({ onStart, isLoading }: Props) {
   const [selectedTopic, setSelectedTopic] = useState<string>("");
   const [customTopic, setCustomTopic] = useState("");
   const [stance, setStance] = useState("");
   const [showCustom, setShowCustom] = useState(false);
+  const [phraseIndex, setPhraseIndex] = useState(0);
 
   const activeTopic = showCustom ? customTopic : selectedTopic;
+
+  useEffect(() => {
+    if (!isLoading) {
+      setPhraseIndex(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setPhraseIndex((i) => Math.min(i + 1, LOADING_PHRASES.length - 1));
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,24 +43,26 @@ export function TopicSelector({ onStart, isLoading }: Props) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero */}
-      <div className="bg-stone-900 text-stone-50 px-6 py-16 text-center">
-        <h1 className="text-4xl font-bold tracking-tight mb-3">
-          The Other Side
+      <div className="bg-stone-900 text-stone-50 px-6 py-12 sm:py-16 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+          Harmonic
         </h1>
-        <p className="text-stone-400 text-lg max-w-md mx-auto">
-          Practice the hardest kind of conversation — with someone who genuinely
-          sees it differently.
+        <p className="text-stone-300 text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
+          Finding the notes that fit together, even when they're not the same.
+        </p>
+        <p className="text-stone-500 text-sm max-w-md mx-auto mt-3">
+          Practice real conversation with someone who genuinely sees it differently.
         </p>
       </div>
 
       {/* Topic picker */}
-      <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-10">
-        <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           <div>
             <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-4">
               Choose a topic
             </h2>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {CURATED_TOPICS.map((t) => (
                 <button
                   key={t}
@@ -65,7 +86,7 @@ export function TopicSelector({ onStart, isLoading }: Props) {
                   setShowCustom(true);
                   setSelectedTopic("");
                 }}
-                className={`text-left px-4 py-3 rounded-lg border text-sm font-medium transition-all col-span-2 ${
+                className={`text-left px-4 py-3 rounded-lg border text-sm font-medium transition-all sm:col-span-2 ${
                   showCustom
                     ? "bg-stone-900 text-stone-50 border-stone-900"
                     : "bg-white text-stone-500 border-stone-200 border-dashed hover:border-stone-400"
@@ -117,7 +138,7 @@ export function TopicSelector({ onStart, isLoading }: Props) {
                   <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
                   <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce" />
                 </span>
-                Finding your conversation partner...
+                {LOADING_PHRASES[phraseIndex]}
               </span>
             ) : (
               "Start the conversation →"

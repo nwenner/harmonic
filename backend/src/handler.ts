@@ -22,13 +22,7 @@ async function getAnthropicClient(): Promise<Anthropic> {
   return anthropic;
 }
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin":
-    process.env.ALLOWED_ORIGIN || "https://harmonic.nickwenner.com",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-  "Content-Type": "application/json",
-};
+const JSON_HEADER = { "Content-Type": "application/json" };
 
 interface PersonaRequest {
   type: "generate_persona";
@@ -60,13 +54,13 @@ interface ChatMessage {
 }
 
 function ok(body: unknown): APIGatewayProxyResultV2 {
-  return { statusCode: 200, headers: CORS_HEADERS, body: JSON.stringify(body) };
+  return { statusCode: 200, headers: JSON_HEADER, body: JSON.stringify(body) };
 }
 
 function err(status: number, message: string): APIGatewayProxyResultV2 {
   return {
     statusCode: status,
-    headers: CORS_HEADERS,
+    headers: JSON_HEADER,
     body: JSON.stringify({ error: message }),
   };
 }
@@ -192,11 +186,6 @@ export const handler = async (
   event: APIGatewayProxyEventV2,
   _context: Context
 ): Promise<APIGatewayProxyResultV2> => {
-  // Handle CORS preflight
-  if (event.requestContext.http.method === "OPTIONS") {
-    return { statusCode: 204, headers: CORS_HEADERS, body: "" };
-  }
-
   if (event.requestContext.http.method !== "POST") {
     return err(405, "Method not allowed");
   }

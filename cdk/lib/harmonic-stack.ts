@@ -8,7 +8,6 @@ import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
-import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as acm from "aws-cdk-lib/aws-certificatemanager";
 
 export interface HarmonicStackProps extends cdk.StackProps {
@@ -157,38 +156,11 @@ export class HarmonicStack extends cdk.Stack {
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
     });
 
-    // ─── Deploy frontend assets to S3 + invalidate CloudFront ──────────────────
-    // Hashed assets (JS/CSS) — long cache
-    new s3deploy.BucketDeployment(this, "DeployAssets", {
-      sources: [
-        s3deploy.Source.asset(path.join(__dirname, "../../frontend/dist")),
-      ],
-      destinationBucket: siteBucket,
-      distribution,
-      distributionPaths: ["/*"],
-      cacheControl: [
-        s3deploy.CacheControl.fromString("public, max-age=31536000, immutable"),
-      ],
-      prune: true,
-    });
-
-    // index.html — no cache so users always get the latest shell
-    new s3deploy.BucketDeployment(this, "DeployIndexHtml", {
-      sources: [
-        s3deploy.Source.asset(path.join(__dirname, "../../frontend/dist"), {
-          exclude: ["**", "!index.html"],
-        }),
-      ],
-      destinationBucket: siteBucket,
-      distribution,
-      distributionPaths: ["/index.html"],
-      cacheControl: [
-        s3deploy.CacheControl.fromString("no-cache, no-store, must-revalidate"),
-      ],
-      prune: false,
-    });
-
     // ─── Outputs ────────────────────────────────────────────────────────────────
+    new cdk.CfnOutput(this, "SiteBucketName", {
+      value: siteBucket.bucketName,
+      description: "S3 bucket for frontend assets",
+    });
     new cdk.CfnOutput(this, "LambdaFunctionUrl", {
       value: fnUrl.url,
       description: "Lambda Function URL",

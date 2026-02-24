@@ -6,9 +6,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk",
-    "deploy": "cdk deploy --profile wenroe",
-    "synth": "cdk synth --profile wenroe",
-    "diff": "cdk diff --profile wenroe",
+    "deploy": "bash -c 'set -a && source ../.env && set +a && cdk deploy --profile wenroe'",
+    "synth": "bash -c 'set -a && source ../.env && set +a && cdk synth --profile wenroe'",
+    "diff": "bash -c 'set -a && source ../.env && set +a && cdk diff --profile wenroe'",
     "bootstrap": "cdk bootstrap --profile wenroe"
   },
   "devDependencies": {
