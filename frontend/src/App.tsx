@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useConversation } from "./hooks/useConversation";
+import { useTheme } from "./hooks/useTheme";
 import { TopicSelector } from "./components/TopicSelector";
 import { PersonaCard } from "./components/PersonaCard";
 import { ChatInterface } from "./components/ChatInterface";
 import { ConversationEnd } from "./components/ConversationEnd";
+import { ThemeToggle } from "./components/ThemeToggle";
 import type { AppState } from "./types";
 
 function App() {
   const [appState, setAppState] = useState<AppState>("select");
+  const { dark, toggle } = useTheme();
   const {
     persona,
     messages,
@@ -37,25 +40,32 @@ function App() {
 
   if (appState === "select") {
     return (
-      <TopicSelector onStart={handleStart} isLoading={isLoadingPersona} />
+      <>
+        <ThemeToggle dark={dark} onToggle={toggle} />
+        <TopicSelector onStart={handleStart} isLoading={isLoadingPersona} />
+      </>
     );
   }
 
   if (appState === "end" && persona) {
     return (
-      <ConversationEnd
-        persona={persona}
-        topic={topic}
-        messageCount={messages.length}
-        onGetReflections={endConversation}
-        onStartOver={handleStartOver}
-      />
+      <>
+        <ThemeToggle dark={dark} onToggle={toggle} />
+        <ConversationEnd
+          persona={persona}
+          topic={topic}
+          messageCount={messages.length}
+          onGetReflections={endConversation}
+          onStartOver={handleStartOver}
+        />
+      </>
     );
   }
 
   if (appState === "chat" && persona) {
     return (
-      <div className="h-dvh flex flex-col">
+      <div className="h-dvh flex flex-col dark:bg-slate-900">
+        <ThemeToggle dark={dark} onToggle={toggle} />
         <PersonaCard persona={persona} topic={topic} onEnd={handleEnd} />
         <ChatInterface
           messages={messages}
@@ -68,9 +78,9 @@ function App() {
     );
   }
 
-  // Fallback loading state (persona generating but state already moved to chat)
   return (
     <div className="min-h-screen flex items-center justify-center">
+      <ThemeToggle dark={dark} onToggle={toggle} />
       <div className="text-center">
         <div className="inline-flex gap-2 mb-4">
           <span className="w-3 h-3 bg-stone-400 rounded-full animate-bounce [animation-delay:-0.3s]" />

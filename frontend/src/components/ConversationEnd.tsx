@@ -29,7 +29,7 @@ export function ConversationEnd({
   const userTurns = Math.floor(messageCount / 2);
 
   return (
-    <div className="min-h-dvh bg-stone-50 flex flex-col items-center justify-start sm:justify-center px-4 sm:px-6 py-8 sm:py-12">
+    <div className="min-h-dvh bg-stone-50 dark:bg-stone-950 flex flex-col items-center justify-start sm:justify-center px-4 sm:px-6 py-8 sm:py-12">
       <div className="max-w-lg w-full">
         {/* Header */}
         <div className="text-center mb-8">
@@ -38,17 +38,17 @@ export function ConversationEnd({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-stone-900 mb-1">
+          <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-1">
             Conversation with {persona.name}
           </h2>
-          <p className="text-stone-500 text-sm">
+          <p className="text-stone-500 dark:text-stone-400 text-sm">
             {userTurns} exchange{userTurns !== 1 ? "s" : ""} on {topic}
           </p>
         </div>
 
         {/* Reflection questions */}
-        <div className="bg-white border border-stone-200 rounded-2xl p-6 mb-6">
-          <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-4">
+        <div className="bg-white dark:bg-[#3a4068] border border-stone-200 dark:border-[#4a5080] rounded-2xl p-6 mb-6">
+          <h3 className="text-sm font-semibold text-stone-500 dark:text-indigo-300 uppercase tracking-wider mb-4">
             Things to sit with
           </h3>
           {isLoading ? (
@@ -67,7 +67,7 @@ export function ConversationEnd({
                   <span className="text-stone-300 font-mono text-sm mt-0.5 flex-shrink-0">
                     {i + 1}.
                   </span>
-                  <p className="text-stone-700 text-sm leading-relaxed">{q}</p>
+                  <p className="text-stone-700 dark:text-stone-200 text-sm leading-relaxed">{q}</p>
                 </li>
               ))}
             </ol>
@@ -79,11 +79,11 @@ export function ConversationEnd({
         </div>
 
         {/* Perspective shift check-in */}
-        <div className="bg-white border border-stone-200 rounded-2xl p-6 mb-6">
-          <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">
+        <div className="bg-white dark:bg-[#3a4068] border border-stone-200 dark:border-[#4a5080] rounded-2xl p-6 mb-6">
+          <h3 className="text-sm font-semibold text-stone-500 dark:text-indigo-300 uppercase tracking-wider mb-3">
             Quick check-in
           </h3>
-          <p className="text-stone-700 text-sm mb-4">
+          <p className="text-stone-700 dark:text-stone-200 text-sm mb-4">
             Did this conversation change how you think about {topic} at all?
           </p>
           <div className="grid grid-cols-3 gap-2">
@@ -93,8 +93,8 @@ export function ConversationEnd({
                 onClick={() => setPerspectiveShift(option)}
                 className={`py-2 px-3 rounded-lg text-xs font-medium border transition-all ${
                   perspectiveShift === option
-                    ? "bg-stone-900 text-stone-50 border-stone-900"
-                    : "bg-stone-50 text-stone-600 border-stone-200 hover:border-stone-400"
+                    ? "bg-cdi-purple text-white border-cdi-purple"
+                    : "bg-stone-50 dark:bg-stone-700 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-600 hover:border-stone-400 dark:hover:border-stone-400"
                 }`}
               >
                 {option}
@@ -102,7 +102,7 @@ export function ConversationEnd({
             ))}
           </div>
           {perspectiveShift && (
-            <p className="text-xs text-stone-400 mt-3">
+            <p className="text-xs text-stone-400 dark:text-stone-500 mt-3">
               Thanks for reflecting. That kind of honesty is what this is all about.
             </p>
           )}
@@ -111,7 +111,7 @@ export function ConversationEnd({
         {/* Start over */}
         <button
           onClick={onStartOver}
-          className="w-full bg-stone-900 text-stone-50 py-4 rounded-xl font-semibold text-sm tracking-wide hover:bg-stone-700 transition-colors"
+          className="w-full bg-cdi-gold text-stone-900 py-4 rounded-xl font-semibold text-sm tracking-wide hover:brightness-105 transition-all"
         >
           Try another conversation
         </button>

@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Harmonic — Finding the notes that fit together</title>
     <meta name="description" content="Finding the notes that fit together, even when they're not the same. Practice real conversation with someone who genuinely sees it differently." />
+    <!-- Run before React to prevent flash of wrong theme -->
+    <script>
+      (function() {
+        var stored = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -65,7 +65,7 @@ export function ChatInterface({
       </div>
 
       {/* Input */}
-      <div className="border-t border-stone-200 bg-white px-4 pt-3 pb-4 pb-[env(safe-area-inset-bottom,1rem)]">
+      <div className="border-t border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 pt-3 pb-4 pb-[env(safe-area-inset-bottom,1rem)]">
         <form
           onSubmit={handleSubmit}
           className="max-w-2xl mx-auto flex gap-3 items-end"
@@ -78,13 +78,13 @@ export function ChatInterface({
             placeholder="Say something..."
             rows={1}
             disabled={isLoading}
-            className="flex-1 resize-none px-4 py-3 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-stone-400 disabled:opacity-50 max-h-36 overflow-y-auto"
+            className="flex-1 resize-none px-4 py-3 border border-stone-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cdi-purple disabled:opacity-50 max-h-36 overflow-y-auto"
             style={{ lineHeight: "1.5", fontSize: "16px" }}
           />
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="bg-slate-700 text-white px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+            className="bg-cdi-purple text-white px-4 py-3 rounded-xl text-sm font-medium hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex-shrink-0"
           >
             Send
           </button>
