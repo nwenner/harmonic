@@ -1,8 +1,11 @@
-# The Other Side
+# Harmonic
 
-> Practice the hardest kind of conversation — with someone who genuinely sees it differently.
+> Finding the notes that fit together, even when they're not the same.
 
-A dialogue practice tool. Pick a topic, meet a realistic AI conversation partner who holds a different view, and practice constructive engagement.
+A dialogue practice tool built for the [Constructive Dialogue Institute](https://constructivedialogue.org). Pick a topic, meet a realistic AI conversation partner who holds a different view, and practice constructive engagement.
+
+**Live:** [harmonic.nickwenner.com](https://harmonic.nickwenner.com)
+**About / write-up:** [harmonic.nickwenner.com/#/about](https://harmonic.nickwenner.com/#/about)
 
 ---
 
@@ -12,82 +15,13 @@ A dialogue practice tool. Pick a topic, meet a realistic AI conversation partner
 harmonic.nickwenner.com
     ↓ CloudFront → S3
 React SPA (Vite + TypeScript + Tailwind)
-    ↓ POST (fetch to Lambda Function URL)
+    ↓ fetch to Lambda Function URL
 AWS Lambda (Node.js 20, arm64) — bundled with esbuild
     ↓
 Anthropic Claude API (claude-sonnet-4-6)
 ```
 
----
-
-## Deploy
-
-All infrastructure is managed by **AWS CDK** (`cdk/`). A single `cdk deploy` provisions and updates everything: Lambda, Function URL, S3 bucket, CloudFront distribution, and ACM certificate.
-
-### Prerequisites
-
-- AWS CLI configured (`aws configure`)
-- CDK bootstrapped once per account/region: `cd cdk && npx cdk bootstrap`
-- Node 20+
-
-### First deploy
-
-```bash
-# 1. Build the frontend (CDK uploads dist/ to S3 during deploy)
-cd frontend
-VITE_API_URL=placeholder npm run build   # real URL set after first deploy
-
-# 2. Deploy infrastructure
-cd ../cdk
-npm install
-
-export ANTHROPIC_API_KEY=sk-ant-...
-
-# Option A: you manage DNS in Route53
-export HOSTED_ZONE_ID=Z1234567890ABC   # hosted zone for nickwenner.com
-npx cdk deploy
-
-# Option B: manual DNS (e.g. Cloudflare, Namecheap)
-npx cdk deploy
-# → CDK prints the CloudFront domain — add it as a CNAME for harmonic.nickwenner.com
-# → CDK also prints a DNS record to validate the ACM certificate — add that too
-```
-
-### After first deploy — fix the frontend API URL
-
-The Lambda Function URL is printed as a CDK output (`LambdaFunctionUrl`). Rebuild the frontend with the real URL, then redeploy:
-
-```bash
-cd frontend
-echo "VITE_API_URL=https://xxxx.lambda-url.us-east-1.on.aws/" > .env.production
-npm run build
-
-cd ../cdk
-npx cdk deploy   # uploads new dist/ to S3 + invalidates CloudFront
-```
-
-### Subsequent deploys
-
-```bash
-# Backend changes (Lambda code):
-cd cdk && ANTHROPIC_API_KEY=sk-ant-... npx cdk deploy
-
-# Frontend changes (UI only):
-cd frontend && npm run build
-cd ../cdk && ANTHROPIC_API_KEY=sk-ant-... npx cdk deploy
-```
-
-CDK detects what changed and only updates those resources.
-
----
-
-## Local Dev
-
-```bash
-# Frontend only (no backend needed for UI work)
-cd frontend && npm run dev
-# Uses VITE_API_URL from .env.local (defaults to http://localhost:3001)
-```
+**API key security:** The Anthropic API key is stored in AWS SSM Parameter Store (`/harmonic/anthropic-api-key` as a `SecureString`) and fetched at Lambda cold start. It is never in source code, environment variables, or CloudFormation.
 
 ---
 
@@ -98,24 +32,104 @@ harmonic/
 ├── frontend/                         # Vite + React + TypeScript + Tailwind
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── TopicSelector.tsx     # Step 1: pick topic + optional stance
+│   │   │   ├── TopicSelector.tsx     # Landing: pick topic + optional stance
 │   │   │   ├── PersonaCard.tsx       # Sticky header showing AI partner info
 │   │   │   ├── ChatInterface.tsx     # Main chat loop + fixed input bar
-│   │   │   ├── MessageBubble.tsx     # User/AI message styling
+│   │   │   ├── MessageBubble.tsx     # User / AI message styling
 │   │   │   ├── TypingIndicator.tsx   # Animated dots while waiting for reply
-│   │   │   └── ConversationEnd.tsx   # Reflection + perspective-shift check-in
+│   │   │   ├── ConversationEnd.tsx   # Reflection + perspective-shift check-in
+│   │   │   ├── ThemeToggle.tsx       # Light / dark toggle (persisted to localStorage)
+│   │   │   └── About.tsx             # Project write-up at /#/about
 │   │   ├── hooks/
-│   │   │   └── useConversation.ts    # All state management + API calls
+│   │   │   ├── useConversation.ts    # All state management + API calls
+│   │   │   └── useTheme.ts           # Dark mode state + localStorage sync
 │   │   ├── types/index.ts
-│   │   ├── App.tsx                   # State machine: select → chat → end
+│   │   ├── App.tsx                   # Router (HashRouter) + state machine: select → chat → end
 │   │   └── main.tsx
-│   └── .env.local                    # VITE_API_URL for local dev
+│   └── package.json
 │
 ├── backend/                          # AWS Lambda (Node.js 20)
-│   └── src/handler.ts                # 3 endpoints: generate_persona, chat, reflection
+│   └── src/handler.ts                # 3 request types: generate_persona · chat · reflection
 │
-└── cdk/                              # AWS CDK (TypeScript)
-    ├── bin/harmonic.ts               # App entry — reads ANTHROPIC_API_KEY from env
-    ├── lib/harmonic-stack.ts         # Stack: Lambda + S3 + CloudFront + ACM
-    └── cdk.json                      # App command + feature flags
+├── cdk/                              # AWS CDK (TypeScript)
+│   ├── bin/harmonic.ts               # Entry — reads CERTIFICATE_ARN from env
+│   ├── lib/harmonic-stack.ts         # Lambda + Function URL + S3 + CloudFront + ACM import
+│   └── cdk.json
+│
+└── scripts/
+    └── deploy-site.sh                # npm run build → s3 sync → CloudFront invalidation
+```
+
+---
+
+## Setup
+
+### Prerequisites
+
+- Node 20+
+- AWS CLI configured with a profile that has permissions for Lambda, S3, CloudFront, SSM, CDK
+- CDK bootstrapped once: `cd cdk && npm run cdk -- bootstrap`
+- An ACM certificate for `harmonic.nickwenner.com` **in us-east-1** (required by CloudFront even if deploying to another region)
+- Anthropic API key stored in SSM:
+  ```bash
+  aws ssm put-parameter \
+    --name /harmonic/anthropic-api-key \
+    --value sk-ant-... \
+    --type SecureString \
+    --profile wenroe
+  ```
+
+### Environment (`.env` at repo root)
+
+Copy and fill in:
+
+```bash
+CERTIFICATE_ARN=arn:aws:acm:us-east-1:ACCOUNT:certificate/CERT-ID
+S3_BUCKET=                  # filled in after first CDK deploy
+CF_DISTRIBUTION_ID=         # filled in after first CDK deploy
+AWS_PROFILE=wenroe
+AWS_REGION=us-east-2
+```
+
+---
+
+## Deploying
+
+### Infrastructure (CDK)
+
+```bash
+cd cdk
+npm install
+npm run deploy        # sources ../.env automatically, uses --profile wenroe
+```
+
+CDK provisions: Lambda function + Function URL (with CORS), S3 bucket, CloudFront distribution, ACM certificate attachment, SSM read permissions.
+
+After the first deploy, copy the `SiteBucketName` and `CloudFrontDistributionId` outputs into `.env`.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run deploy        # runs scripts/deploy-site.sh: build → s3 sync → CF invalidation
+```
+
+### Backend-only redeploy
+
+```bash
+cd cdk && npm run deploy
+```
+
+CDK detects the Lambda source changed and updates only the function code.
+
+---
+
+## Local Dev
+
+```bash
+cd frontend
+npm run dev
+# Proxies API calls to VITE_API_URL in .env.local
+# Create frontend/.env.local with: VITE_API_URL=https://your-lambda-url
 ```
