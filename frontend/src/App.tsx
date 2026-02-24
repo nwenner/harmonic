@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import { useConversation } from "./hooks/useConversation";
 import { useTheme } from "./hooks/useTheme";
 import { TopicSelector } from "./components/TopicSelector";
@@ -6,9 +7,10 @@ import { PersonaCard } from "./components/PersonaCard";
 import { ChatInterface } from "./components/ChatInterface";
 import { ConversationEnd } from "./components/ConversationEnd";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { About } from "./components/About";
 import type { AppState } from "./types";
 
-function App() {
+function Main() {
   const [appState, setAppState] = useState<AppState>("select");
   const { dark, toggle } = useTheme();
   const {
@@ -92,6 +94,15 @@ function App() {
         </p>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Main />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
   );
 }
 

@@ -49,7 +49,7 @@ export function PersonaCard({ persona, topic, onEnd }: Props) {
                 {persona.age} · {persona.occupation} · {persona.location}
               </span>
             </div>
-            <p className="text-stone-600 dark:text-stone-300 text-xs mt-0.5 leading-relaxed line-clamp-2">
+            <p className="text-stone-600 dark:text-stone-300 text-xs mt-0.5 leading-relaxed">
               {persona.oneLineSummary}
             </p>
             <div className="mt-1">
