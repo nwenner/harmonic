@@ -1,0 +1,20 @@
+{
+  "name": "harmonic-backend",
+  "version": "1.0.0",
+  "description": "The Other Side - Lambda backend",
+  "main": "dist/handler.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/handler.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.3",
+    "@aws-sdk/client-ssm": "^3.750.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^20.17.0",
+    "typescript": "^5.7.2"
+  }
+}

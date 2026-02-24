@@ -1,0 +1,24 @@
+{
+  "name": "harmonic-cdk",
+  "version": "1.0.0",
+  "description": "CDK infrastructure for The Other Side",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "deploy": "cdk deploy --profile wenroe",
+    "synth": "cdk synth --profile wenroe",
+    "diff": "cdk diff --profile wenroe",
+    "bootstrap": "cdk bootstrap --profile wenroe"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "typescript": "^5.7.2",
+    "aws-cdk": "^2.240.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.240.0",
+    "constructs": "^10.4.2",
+    "esbuild": "0.27.3"
+  }
+}
