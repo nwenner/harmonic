@@ -2,7 +2,7 @@
 
 > Practice the hardest kind of conversation — with someone who genuinely sees it differently.
 
-A CDI dialogue practice tool. Pick a topic, meet a realistic AI conversation partner who holds a different view, and practice constructive engagement.
+A dialogue practice tool. Pick a topic, meet a realistic AI conversation partner who holds a different view, and practice constructive engagement.
 
 ---
 
