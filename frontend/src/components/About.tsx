@@ -64,7 +64,7 @@ export function About() {
                 1. Focus on Option A: The Practice Conversation
               </h3>
               <p className="text-stone-600 dark:text-stone-400 text-sm leading-relaxed">
-                I chose Option A because it is the most immediately experiential. CDI's mission is centered on practice, not just content. By providing a realistic interlocutor, we move the user from passive learning to active skill application.
+                I chose Option A because it is the most immediately experiential. CDI's mission is centered on practice, not just content. By providing a realistic counterpart, we move the user from passive learning to active skill application.
               </p>
             </div>
 
@@ -115,7 +115,7 @@ export function About() {
               {[
                 { label: "Frontend", detail: "A responsive React SPA (Vite + TypeScript + Tailwind) focusing on a \"warm neutral\" aesthetic to lower user heart rates and encourage contemplation." },
                 { label: "Backend", detail: "AWS Lambda (Node.js 20) using a Function URL for low latency and direct CORS handling." },
-                { label: "Intelligence", detail: "Anthropic's Claude 3.5 Sonnet, chosen for its superior nuance in roleplay and adherence to complex system prompts compared to other models." },
+                { label: "Intelligence", detail: "Anthropic's Claude 4.6 Sonnet, chosen for its superior nuance in roleplay and adherence to complex system prompts compared to other models." },
               ].map(({ label, detail }) => (
                 <li key={label} className="flex gap-3 text-sm">
                   <span className="font-semibold text-stone-800 dark:text-stone-200 flex-shrink-0 w-24">{label}</span>
@@ -139,7 +139,7 @@ export function About() {
               {[
                 { label: "Perspective Shift Self-Reports", detail: "A post-session question: \"Did this conversation change how you view people who hold this stance?\"" },
                 { label: "Engagement Depth", detail: "Measuring average message length and turns per session to ensure users are engaging deeply rather than dropping off." },
-                { label: "Qualitative Transcript Review", detail: "Auditing sessions for \"ideal interlocutor\" behavior—did the AI model the constructive behaviors CDI teaches?" },
+                { label: "Qualitative Transcript Review", detail: "Auditing sessions for \"ideal counterpart\" behavior—did the AI model the constructive behaviors CDI teaches?" },
               ].map(({ label, detail }) => (
                 <li key={label} className="flex gap-3 text-sm">
                   <span className="text-cdi-purple mt-1.5 flex-shrink-0">•</span>
